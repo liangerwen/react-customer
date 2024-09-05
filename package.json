@@ -1,0 +1,14 @@
+{
+  "name": "react-customer-menorepo",
+  "private": true,
+  "scripts": {
+    "dev": "lerna run --include-dependencies --stream --parallel dev",
+    "build": "lerna run build --scope react-customer --stream --ignore '*ignore*'",
+    "pub": "pnpm build && lerna publish major"
+  },
+  "devDependencies": {
+    "lerna": "^8.1.8",
+    "react": "^18.3.1",
+    "@types/react": "^18.3.1"
+  }
+}
