@@ -14,10 +14,6 @@ export interface AppCustomApi {
   increase: () => void;
 }
 
-const App2 = withCustom("App", ({ wrap }) => {
-  return wrap(<button>App2</button>);
-});
-
 const App = withCustom(
   "App",
   ({ customApi, exposeApi, wrap }: CustomProps<AppCustomApi, AppExposeApi>) => {
@@ -53,7 +49,6 @@ const App = withCustom(
             Edit <code>src/App.tsx</code> and save to test HMR
           </p>
         </div>
-        {count > 10 && <App2 />}
         <p className="read-the-docs">
           Click on the Vite and React logos to learn more
         </p>

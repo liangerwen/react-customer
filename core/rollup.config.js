@@ -2,6 +2,7 @@ import typescript from "@rollup/plugin-typescript";
 import swc from "@rollup/plugin-swc";
 import dts from "rollup-plugin-dts";
 import del from "rollup-plugin-delete";
+import terser from "@rollup/plugin-terser";
 
 const isProduction = process.env.BUILD_ENV === "production";
 
@@ -30,6 +31,7 @@ const others = {
         },
       },
     }),
+    isProduction && terser(),
   ],
 };
 
