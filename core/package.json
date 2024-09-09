@@ -2,20 +2,34 @@
   "name": "react-customer",
   "version": "1.0.1",
   "description": "基于react的定制化功能库",
+  "keywords": [
+    "react",
+    "customer",
+    "framework",
+    "frontend"
+  ],
   "type": "module",
   "main": "dist/lib/index.js",
+  "unpkg": "dist/umd/react-customer.min.js",
   "typings": "dist/types.d.ts",
   "module": "dist/es/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liangerwen/react-customer"
+  },
+  "homepage": "https://github.com/liangerwen/react-customer",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
     "dev": "rollup --config -w",
-    "build": "rollup --config --environment BUILD_ENV:production"
+    "build": "rollup --config --environment NODE_ENV:production"
   },
   "files": [
     "dist/**/*",
-    "README.md"
+    "README.md",
+    "README-zh_CN.md",
+    "LICENSE"
   ],
   "author": "liangerwen",
   "license": "MIT",
@@ -23,6 +37,9 @@
     "react": "^18.3.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-swc": "^0.3.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",

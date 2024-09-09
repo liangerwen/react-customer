@@ -6,9 +6,10 @@ const useMergeElement = (id: string) => {
   const ctx = useContext(ElementContext);
   return useCallback(
     (cb: (ele: ElementWithUtils) => void) => {
-      const elementUtils = createElementWithUtils(ctx.current.elements[id]);
+      const element = { current: ctx.current.elements[id] };
+      const elementUtils = createElementWithUtils(element);
       cb(elementUtils);
-      return elementUtils.$element.current;
+      return element.current;
     },
     [id]
   );

@@ -1,6 +1,29 @@
-## ReactCustomer
+# ReactCustomer
 
-## 用于 react 技术栈的 sass 项目平台逻辑与定制逻辑的解耦，提高项目的可维护性、可扩展性、可复用性。
+Decoupling the Sass platform logic and custom logic used in the react project technology stack improves the maintainability, scalability, and reusability of the project.
+
+## Development
+
+```
+pnpm i
+npm dev
+open http://localhost:5173
+```
+
+## Install
+
+[react-customer npm page](https://www.npmjs.com/package/react-customer)
+
+```sh
+# npm
+npm i react-customer --save
+# yarn
+yarn add react-customer -S
+# pnpm
+pnpm i react-customer -S
+```
+
+## Usage
 
 ```tsx
 // main.tsx
@@ -127,3 +150,34 @@ const App = withCustom(
 
 export default App;
 ```
+
+## withCustom(componentName: string, WrapperComponent: React.Component) => React.Component
+
+| Props    | Description                              | Type       |
+|-----------|------------------------------------------|------------|
+| props.customApi | Use custom plugin expose api. | Object |
+| props.exposeApi | Expose platfrom api to custom plugin. | (api: Object): void |
+| props.wrap | Wrap platfrom ReactElement. | (element: React.ReactElement): React.ReactElement |
+
+## CustomPluginProps
+
+| Props    | Description                              | Type       |
+|-----------|----------|------------|
+| props.merge | Merge custom plugin to platform ReactElement. | (element: ElementUtils): React.ReactElement |
+| props.platformApi | Use platform api. | Object |
+
+## ElementUtils
+
+| Property    | Description                              | Type       |
+|-----------|------------------------------------------|------------|
+| property.appendBefore | Append element before target platform element. | (id: string, element: React.ReactElement): void |
+| property.appendAfter | Append element after target platform element. | (id: string, element: React.ReactElement): void |
+| property.replace | Replace target platform element with element. | (id: string, element: React.ReactElement): void |
+| property.replaceChildren | Replace target platform element children with element. | (id: string, element: React.ReactElement): void |
+| property.remove | Remove target platform element. | (id: string): void |
+| property.insertBefore | Insert element before target platform element. | (id: string, element: React.ReactElement): void |
+| property.insertAfter | Insert element after target platform element. | (id: string, element: React.ReactElement): void |
+
+## License
+
+react-customer is released under the MIT license.

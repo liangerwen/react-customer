@@ -1,4 +1,4 @@
-import { forwardRef, useState, useImperativeHandle, useEffect } from "react";
+import { forwardRef, useState, useImperativeHandle, useEffect, ReactElement } from "react";
 import { CustomPluginProps } from "react-customer";
 
 const AppPlugin = forwardRef(
@@ -32,16 +32,11 @@ const AppPlugin = forwardRef(
             console.log(platformApi, "pxl");
           }}
         >
-          {c}
+          我是pluginA: {c}
         </button>
       );
-    });
+    }) as ReactElement;
   }
 );
 
-export default [
-  {
-    name: "App",
-    component: AppPlugin,
-  },
-];
+export default AppPlugin;

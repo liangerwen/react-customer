@@ -2,6 +2,7 @@ import {
   Children,
   cloneElement,
   isValidElement,
+  MutableRefObject,
   PropsWithChildren,
   ReactElement,
   ReactNode,
@@ -104,8 +105,7 @@ const mergeElement: MergeElement = ({
   });
 };
 
-const createElementWithUtils = (originNode: ReactNode) => {
-  const $element = { current: originNode };
+const createElementWithUtils = ($element: MutableRefObject<ReactNode>) => {
   const utils = Object.keys(operateMap).reduce((acc, key) => {
     const operateType = key as keyof typeof operateMap;
     acc[operateType] = (targetId, targetNode) => {
@@ -118,11 +118,7 @@ const createElementWithUtils = (originNode: ReactNode) => {
     };
     return acc;
   }, {} as Record<keyof typeof operateMap, (id: string, node: ReactNode) => void>);
-
-  return {
-    $element,
-    ...utils,
-  };
+  return utils;
 };
 
 export default createElementWithUtils;

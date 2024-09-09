@@ -9,14 +9,16 @@ import {
 import CustomContext from "./context";
 import withDefineCustom, { CustomPluginProps } from "./with-define-custom";
 
-type Plugin = { name: string; component: ComponentType<CustomPluginProps> };
+export type Plugin = {
+  name: string;
+  component: ComponentType<CustomPluginProps>;
+};
 
-const CustomProvider = ({
-  children,
-  plugins,
-}: PropsWithChildren<{
+export type CustomProviderProps = PropsWithChildren<{
   plugins: Plugin[];
-}>) => {
+}>;
+
+const CustomProvider = ({ children, plugins }: CustomProviderProps) => {
   const [update, setUpdate] = useState({});
   const ref = useRef({
     elements: {},

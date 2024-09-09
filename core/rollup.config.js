@@ -3,8 +3,11 @@ import swc from "@rollup/plugin-swc";
 import dts from "rollup-plugin-dts";
 import del from "rollup-plugin-delete";
 import terser from "@rollup/plugin-terser";
+import replace from "@rollup/plugin-replace";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 
-const isProduction = process.env.BUILD_ENV === "production";
+const isProduction = process.env.NODE_ENV === "production";
 
 const typesDirName = "types";
 
@@ -13,11 +16,13 @@ const others = {
     del({
       targets: "dist",
     }),
-    typescript({
-      tsconfig: "./tsconfig.json",
-      compilerOptions: {
-        outDir: typesDirName,
-      },
+    resolve({
+      extensions: [".js", ".jsx", ".ts", ".tsx"],
+    }),
+    commonjs(),
+    replace({
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      preventAssignment: true,
     }),
     swc({
       swc: {
@@ -29,6 +34,12 @@ const others = {
             },
           },
         },
+      },
+    }),
+    typescript({
+      tsconfig: "./tsconfig.json",
+      compilerOptions: {
+        outDir: typesDirName,
       },
     }),
     isProduction && terser(),

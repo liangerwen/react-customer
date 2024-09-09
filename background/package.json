@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "preview": "vite preview",
     "build": "tsc -b && vite build"
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-customer": "workspace:*"
+    "react-customer": "workspace:*",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -22,6 +23,10 @@
     "globals": "^15.9.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vite-plugin-cdn": "1.0.0-beta.3",
+    "vite-plugin-cdn-import": "^1.0.1",
+    "vite-plugin-externals": "^0.6.2",
+    "vite-plugin-html": "^3.2.2"
   }
 }

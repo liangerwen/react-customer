@@ -1,0 +1,28 @@
+{
+  "name": "plugin-demo",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "rollup --config -w",
+    "build": "rollup --config"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-customer": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.7",
+    "@rollup/plugin-swc": "^0.3.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@swc/core": "^1.3.19",
+    "rollup": "^3.4.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "typescript": "^4.6.4"
+  }
+}
