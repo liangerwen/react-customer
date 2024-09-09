@@ -23,7 +23,7 @@ const externalModules = [
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
   define: {
-    "window.__CUSTOMER_CODE__": JSON.stringify("b"),
+    "window.__CUSTOMER_CODE__": JSON.stringify("a"),
   },
   plugins: [
     react(),
