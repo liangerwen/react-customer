@@ -152,12 +152,6 @@ importers:
       rollup-plugin-delete:
         specifier: ^2.0.0
         version: 2.0.0
-      rollup-plugin-dts:
-        specifier: ^6.1.1
-        version: 6.1.1(rollup@3.29.4)(typescript@4.9.5)
-      rollup-plugin-serve:
-        specifier: ^1.1.1
-        version: 1.1.1
       typescript:
         specifier: ^4.6.4
         version: 4.9.5
@@ -2199,11 +2193,6 @@ packages:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
 
-  mime@2.6.0:
-    resolution: {integrity: sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg==}
-    engines: {node: '>=4.0.0'}
-    hasBin: true
-
   mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
     engines: {node: '>=6'}
@@ -2415,10 +2404,6 @@ packages:
   open@8.4.2:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
-
-  opener@1.5.2:
-    resolution: {integrity: sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==}
-    hasBin: true
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -2782,9 +2767,6 @@ packages:
     resolution: {integrity: sha512-RXlupZrmn97AaaS5dWnktkjM+Iy+od0E+8L0mUkMIs3iuoUXNJebueQocQKV7Ircd54fSGGmkBaXwNzY05J1yQ==}
     peerDependencies:
       rollup: ^2.25.0 || ^3.3.0 || ^4.1.4
-
-  rollup-plugin-serve@1.1.1:
-    resolution: {integrity: sha512-H0VarZRtFR0lfiiC9/P8jzCDvtFf1liOX4oSdIeeYqUCKrmFA7vNiQ0rg2D+TuoP7leaa/LBR8XBts5viF6lnw==}
 
   rollup@2.79.1:
     resolution: {integrity: sha512-uKxbd0IhMZOhjAiD5oAFp7BqvkA4Dv47qpOCtaNvng4HBwdbWtdOh8f5nZNuk2rp51PMGk3bzfWu5oayNEuYnw==}
@@ -5552,8 +5534,6 @@ snapshots:
     dependencies:
       mime-db: 1.52.0
 
-  mime@2.6.0: {}
-
   mimic-fn@2.1.0: {}
 
   min-indent@1.0.1: {}
@@ -5826,8 +5806,6 @@ snapshots:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
-
-  opener@1.5.2: {}
 
   optionator@0.9.4:
     dependencies:
@@ -6200,11 +6178,6 @@ snapshots:
       is-reference: 3.0.2
       magic-string: 0.30.11
       rollup: 4.21.2
-
-  rollup-plugin-serve@1.1.1:
-    dependencies:
-      mime: 2.6.0
-      opener: 1.5.2
 
   rollup@2.79.1:
     optionalDependencies:
