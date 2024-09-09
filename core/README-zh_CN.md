@@ -6,7 +6,7 @@
 
 ```
 pnpm i
-npm dev
+pnpm dev
 open http://localhost:5173
 ```
 
@@ -153,31 +153,31 @@ export default App;
 
 ## withCustom(componentName: string, WrapperComponent: React.Component) => React.Component
 
-| Props    | Description                              | Type       |
-|-----------|------------------------------------------|------------|
-| props.customApi | Use custom plugin expose api. | Object |
-| props.exposeApi | Expose platfrom api to custom plugin. | (api: Object): void |
-| props.wrap | Wrap platfrom ReactElement. | (element: React.ReactElement): React.ReactElement |
+| 属性      | 描述                            | 类型                                              |
+| --------- | ------------------------------- | ------------------------------------------------- |
+| customApi | 定制包暴露的 api。              | Object                                            |
+| exposeApi | 用于暴露平台 api 给定制包使用。 | (api: Object): void                               |
+| wrap      | 包装平台 ReactElement 方法。    | (element: React.ReactElement): React.ReactElement |
 
 ## CustomPluginProps
 
-| Props    | Description                              | Type       |
-|-----------|----------|------------|
-| props.merge | Merge custom plugin to platform ReactElement. | (element: MergeUtils): React.ReactElement |
-| props.platformApi | Use platform api. | Object |
+| 属性        | 描述                                   | 类型                                      |
+| ----------- | -------------------------------------- | ----------------------------------------- |
+| merge       | 合并扩展包 ReactElement 到平台的方法。 | (element: MergeUtils): React.ReactElement |
+| platformApi | 平台暴露的 api。                       | Object                                    |
 
 ## MergeUtils
 
-| Property    | Description                              | Type       |
-|-----------|------------------------------------------|------------|
-| property.appendBefore | Append element before target platform element. | (id: string, element: React.ReactElement): void |
-| property.appendAfter | Append element after target platform element. | (id: string, element: React.ReactElement): void |
-| property.replace | Replace target platform element with element. | (id: string, element: React.ReactElement): void |
-| property.replaceChildren | Replace target platform element children with element. | (id: string, element: React.ReactElement): void |
-| property.remove | Remove target platform element. | (id: string): void |
-| property.insertBefore | Insert element before target platform element. | (id: string, element: React.ReactElement): void |
-| property.insertAfter | Insert element after target platform element. | (id: string, element: React.ReactElement): void |
+| 属性            | 描述                           | 类型                                            |
+| --------------- | ------------------------------ | ----------------------------------------------- |
+| appendBefore    | 插入元素到目标平台元素之前。   | (id: string, element: React.ReactElement): void |
+| appendAfter     | 插入元素到目标平台元素之后。   | (id: string, element: React.ReactElement): void |
+| replace         | 替换目标平台元素。             | (id: string, element: React.ReactElement): void |
+| replaceChildren | 替换目标平台元素的子元素。     | (id: string, element: React.ReactElement): void |
+| remove          | 移除目标平台元素。             | (id: string): void                              |
+| insertBefore    | 向目标平台元素之前插入子元素。 | (id: string, element: React.ReactElement): void |
+| insertAfter     | 向目标平台元素之后插入子元素。 | (id: string, element: React.ReactElement): void |
 
 ## 开源许可
 
-react-customer使用MIT许可证。
+react-customer 使用 MIT 许可证。
