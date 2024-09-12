@@ -34,7 +34,7 @@
   "author": "liangerwen",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^18.3.1"
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",
