@@ -54,17 +54,17 @@ export default [
       {
         file: "dist/lib/index.js",
         format: "cjs",
-        sourcemap: isProduction,
+        sourcemap: false,
       },
       {
         file: "dist/es/index.js",
         format: "es",
-        sourcemap: isProduction,
+        sourcemap: false,
       },
       isProduction && {
         file: "dist/umd/react-customer.min.js",
         format: "umd",
-        sourcemap: true,
+        sourcemap: false,
         name: "ReactCustomer",
         globals: {
           react: "React",
