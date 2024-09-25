@@ -16,7 +16,7 @@ const externalModules = [
   {
     name: "react-customer",
     var: "ReactCustomer",
-    path: "https://unpkg.luckincdn.com/react-customer@1.0.2/dist/umd/react-customer.min.js",
+    path: "https://unpkg.luckincdn.com/react-customer",
   },
 ];
 

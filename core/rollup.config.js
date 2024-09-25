@@ -74,11 +74,11 @@ export default [
     ...others,
   },
   {
-    cache: false,
-    input: `dist/es/${typesDirName}/index.d.ts`,
+    input: "./src/index.ts",
     output: {
       file: "dist/types.d.ts",
       format: "es",
+      sourcemap: false,
     },
     plugins: [
       dts(),
