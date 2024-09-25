@@ -39,8 +39,7 @@ const App = withCustom(
           <button
             onClick={() => {
               setCount(count + 1);
-              customApi.current?.increase?.();
-              console.log(customApi.current?.count);
+              customApi?.increase?.();
             }}
           >
             count is {count}

@@ -74,6 +74,7 @@ export default [
     ...others,
   },
   {
+    cache: false,
     input: `dist/es/${typesDirName}/index.d.ts`,
     output: {
       file: "dist/types.d.ts",

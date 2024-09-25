@@ -1,12 +1,14 @@
-import { MutableRefObject, useContext } from "react";
+import { useContext } from "react";
 import CustomContext from "../context";
-import { createEmptyRef } from "../utils/ref";
 import type { DefaultApi } from "../type";
+import { createEmptyRef } from "../utils/ref";
 
 const usePlatformApi = <T = DefaultApi>(id: string) => {
   const ctx = useContext(CustomContext);
-  return (ctx.current.platformApis[id] ??
-    createEmptyRef()) as MutableRefObject<T>;
+  if (!ctx.current.platformApis[id]) {
+    ctx.current.platformApis[id] = createEmptyRef();
+  }
+  return ctx.current.platformApis[id].current as T;
 };
 
 export default usePlatformApi;

@@ -2,7 +2,6 @@ import {
   ComponentProps,
   ComponentType,
   forwardRef,
-  MutableRefObject,
   PropsWithRef,
   ReactNode,
   useContext,
@@ -10,12 +9,13 @@ import {
 import { useCustomApi, useCustomWrap } from "./hooks";
 import CustomContext from "./context";
 import type { DefaultApi } from "./type";
+import { createEmptyRef } from "./utils/ref";
 
 export interface CustomProps<
   C extends DefaultApi = DefaultApi,
   T extends DefaultApi = DefaultApi
 > {
-  customApi: MutableRefObject<Partial<C> | undefined>;
+  customApi: Partial<C>;
   exposeApi: (api: T) => void;
   wrap: (component: ReactNode) => ReactNode;
 }
@@ -52,7 +52,7 @@ const withCustom = (() => {
 
       const exposeApi = (api: T) => {
         if (!ctx.current.platformApis[id]) {
-          ctx.current.platformApis[id] = { current: {} };
+          ctx.current.platformApis[id] = createEmptyRef();
         }
         ctx.current.platformApis[id].current = api;
       };

@@ -13,6 +13,11 @@
   "unpkg": "dist/umd/react-customer.min.js",
   "typings": "dist/types.d.ts",
   "module": "dist/es/index.js",
+  "exports":{
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/liangerwen/react-customer"

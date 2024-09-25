@@ -12,7 +12,6 @@ const AppPlugin = forwardRef(
       return {
         increase: () => {
           setC(c + 1);
-          console.log(c, "pxl");
         },
         c,
       };
@@ -28,8 +27,7 @@ const AppPlugin = forwardRef(
         <button
           onClick={() => {
             setC(c - 1);
-            platformApi.current?.increase?.();
-            console.log(platformApi, "pxl");
+            platformApi?.increase?.();
           }}
         >
           我是pluginA: {c}

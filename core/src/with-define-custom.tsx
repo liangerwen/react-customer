@@ -1,7 +1,6 @@
 import {
   ComponentType,
   forwardRef,
-  MutableRefObject,
   PropsWithRef,
 } from "react";
 import { usePlatformApi, useMergeElement } from "./hooks";
@@ -9,7 +8,7 @@ import type { DefaultApi } from "./type";
 
 export interface CustomPluginProps<T = DefaultApi> {
   merge: ReturnType<typeof useMergeElement>;
-  platformApi: MutableRefObject<Partial<T>>;
+  platformApi: Partial<T>;
 }
 
 const withDefineCustom = <T,>(
