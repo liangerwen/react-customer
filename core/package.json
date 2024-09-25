@@ -1,6 +1,6 @@
 {
   "name": "react-customer",
-  "version": "1.0.3-alpha.0",
+  "version": "0.0.1",
   "description": "基于react的定制化功能库",
   "keywords": [
     "react",
@@ -13,7 +13,7 @@
   "unpkg": "dist/umd/react-customer.min.js",
   "typings": "dist/types.d.ts",
   "module": "dist/es/index.js",
-  "exports":{
+  "exports": {
     ".": {
       "import": "./src/index.ts"
     }
