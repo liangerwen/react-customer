@@ -9,8 +9,6 @@ import commonjs from "@rollup/plugin-commonjs";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const typesDirName = "types";
-
 const others = {
   plugins: [
     del({
@@ -39,7 +37,7 @@ const others = {
     typescript({
       tsconfig: "./tsconfig.json",
       compilerOptions: {
-        outDir: typesDirName,
+        declaration: false,
       },
     }),
     isProduction && terser(),
@@ -82,10 +80,6 @@ export default [
     },
     plugins: [
       dts(),
-      del({
-        targets: `dist/**/${typesDirName}`,
-        hook: "buildEnd",
-      }),
     ],
   },
 ];
