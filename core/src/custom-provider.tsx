@@ -7,15 +7,10 @@ import {
   useState,
 } from "react";
 import CustomContext from "./context";
-import withDefineCustom, { CustomPluginProps } from "./with-define-custom";
-
-export type Plugin = {
-  name: string;
-  component: ComponentType<CustomPluginProps>;
-};
+import withDefineCustom from "./with-define-custom";
 
 export type CustomProviderProps = PropsWithChildren<{
-  plugins: Plugin[];
+  plugins: ReturnType<typeof withDefineCustom>[];
 }>;
 
 const CustomProvider = ({ children, plugins }: CustomProviderProps) => {
@@ -28,19 +23,22 @@ const CustomProvider = ({ children, plugins }: CustomProviderProps) => {
   });
 
   const initPlugins = () => {
-    const components: Record<string, ComponentType> = {};
-    plugins.forEach(({ name, component }) => {
-      components[name] = withDefineCustom(name, component);
-    });
-    ref.current.customComponents = components;
+    ref.current.customComponents = plugins.reduce((acc, cur) => {
+      const { id, Component } = cur;
+      acc[id] = Component;
+      return acc;
+    }, {} as Record<string, ComponentType>);
     setUpdate({});
   };
 
   useLayoutEffect(() => {
     initPlugins();
-  }, [plugins?.map((p) => p.name)?.join(",")]);
+  }, [plugins?.map((p) => p.id)?.join(",")]);
 
-  const ctx = useMemo(() => ({ ...ref, update }), [update]);
+  const ctx = useMemo(
+    () => ({ ...ref, flush: update, update: () => setUpdate({}) }),
+    [update]
+  );
 
   return (
     <CustomContext.Provider value={ctx}>{children}</CustomContext.Provider>

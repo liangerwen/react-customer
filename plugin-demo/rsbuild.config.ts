@@ -30,6 +30,7 @@ export default defineConfig({
     externals: {
       react: "React",
       "react-customer": "ReactCustomer",
+      antd: "antd",
     },
     legalComments: "none",
   },

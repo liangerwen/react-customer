@@ -1,10 +1,8 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { useState, useLayoutEffect } from "react";
-import { CustomProvider, type Plugin } from "react-customer";
+import { CustomProvider, type CustomProviderProps } from "react-customer";
 import "./dev.ts";
-
-import "./index.css";
 
 const pluginsJson: Record<string, string> = {
   a: "http://localhost:8080/a/plugin.min.js",
@@ -12,7 +10,7 @@ const pluginsJson: Record<string, string> = {
 };
 
 const Main = () => {
-  const [plugins, setPlugins] = useState<Plugin[]>([]);
+  const [plugins, setPlugins] = useState<CustomProviderProps["plugins"]>([]);
 
   const loadPlugins = () => {
     const href = pluginsJson[window.__CUSTOMER_CODE__];

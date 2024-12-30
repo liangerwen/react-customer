@@ -40,107 +40,85 @@ createRoot(document.getElementById("root")!).render(
 );
 
 // plugins.tsx
-import { forwardRef, useState, useImperativeHandle, useEffect } from "react";
-import { CustomPluginProps } from "react-customer";
+import { forwardRef, useState, useImperativeHandle } from "react";
+import { withDefineCustom } from "react-customer";
+import { Button, ButtonProps, Input } from "antd";
 
-const AppPlugin = forwardRef(
-  (
-    { merge, platformApi }: CustomPluginProps<{ increase: () => void }>,
-    ref
-  ) => {
-    const [c, setC] = useState(1000);
+const AppPlugin = withDefineCustom<{
+  clickButton: () => void;
+}>(
+  "App",
+  forwardRef(({ merge, platformApi }, ref) => {
+    const [text, setText] = useState("");
+
+    const setInputText = (txt: string) => setText(txt);
 
     useImperativeHandle(ref, () => {
-      return {
-        increase: () => {
-          setC(c + 1);
-        },
-        c,
-      };
+      return { setInputText };
     });
-
-    useEffect(() => {
-      return () => console.log("unmount");
-    }, []);
 
     return merge((element) => {
-      element.insertAfter(
-        "origin",
-        <button
+      element.replaceChildren("button-02", "我是Button2【定制按钮-A】");
+      element.replaceProps<ButtonProps>("button-02", {
+        onClick: () => {
+          setText("点击了定制按钮Button2【A】");
+        },
+      });
+      element.appendBefore(
+        "button-01",
+        <Button
           onClick={() => {
-            setC(c - 1);
-            platformApi.current?.increase?.();
+            platformApi?.clickButton?.();
           }}
         >
-          {c}
-        </button>
+          我是定制按钮Button3【A】
+        </Button>
+      );
+      element.appendAfter(
+        "button-02",
+        <Input value={text} onChange={(e) => setText(e.target.value)} />
       );
     });
-  }
+  })
 );
 
-export default [
-  {
-    name: "App",
-    component: AppPlugin,
-  },
-];
+export default [AppPlugin];
 
 // app.tsx
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import { CustomProps, withCustom } from "react-customer";
-
-import "./App.css";
+import { withCustom } from "react-customer";
+import { Button } from "antd";
 
 export interface AppExposeApi {
-  increase: () => void;
+  clickButton: () => void;
 }
 
 export interface AppCustomApi {
-  count: number;
-  increase: () => void;
+  setInputText: (text: string) => void;
 }
 
-const App = withCustom(
+const App = withCustom<AppCustomApi, AppExposeApi>(
   "App",
-  ({ customApi, exposeApi, wrap }: CustomProps<AppCustomApi, AppExposeApi>) => {
-    const [count, setCount] = useState(0);
-    exposeApi({
-      increase: () => {
-        setCount(count - 1);
-      },
-    });
+  ({ customApi, exposeApi, wrap }) => {
+    const clickButton = () => {
+      customApi?.setInputText?.("点击了Button1");
+    };
+
+    exposeApi({ clickButton });
 
     return wrap(
       <>
-        <div>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button
-            onClick={() => {
-              setCount(count + 1);
-              customApi.current?.increase?.();
-              console.log(customApi.current?.count);
-            }}
-          >
-            count is {count}
-          </button>
-          <p data-id="origin">
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
+        <Button type="primary" onClick={clickButton} data-id="button-01">
+          我是Button1
+        </Button>
+        <Button
+          data-id="button-02"
+          type="dashed"
+          onClick={() => {
+            customApi?.setInputText?.("点击了Button2");
+          }}
+        >
+          我是Button2
+        </Button>
       </>
     );
   }
@@ -151,30 +129,31 @@ export default App;
 
 ## withCustom(componentName: string, WrapperComponent: React.Component) => React.Component
 
-| Props           | Description                           | Type                                              |
-| --------------- | ------------------------------------- | ------------------------------------------------- |
-| props.customApi | Use custom plugin expose api.         | Object                                            |
-| props.exposeApi | Expose platfrom api to custom plugin. | (api: Object): void                               |
-| props.wrap      | Wrap platfrom ReactElement.           | (element: React.ReactElement): React.ReactElement |
+| Props     | Description                           | Type                                              |
+| --------- | ------------------------------------- | ------------------------------------------------- |
+| customApi | Use custom plugin expose api.         | Object                                            |
+| exposeApi | Expose platfrom api to custom plugin. | (api: Object): void                               |
+| wrap      | Wrap platfrom ReactElement.           | (element: React.ReactElement): React.ReactElement |
 
 ## CustomPluginProps
 
-| Props             | Description                                   | Type                                        |
-| ----------------- | --------------------------------------------- | ------------------------------------------- |
-| props.merge       | Merge custom plugin to platform ReactElement. | (element: ElementUtils): React.ReactElement |
-| props.platformApi | Use platform api.                             | Object                                      |
+| Props       | Description                                   | Type                                        |
+| ----------- | --------------------------------------------- | ------------------------------------------- |
+| merge       | Merge custom plugin to platform ReactElement. | (element: ElementUtils): React.ReactElement |
+| platformApi | Use platform api.                             | Object                                      |
 
 ## ElementUtils
 
-| Property                 | Description                                            | Type                                            |
-| ------------------------ | ------------------------------------------------------ | ----------------------------------------------- |
-| property.appendBefore    | Append element before target platform element.         | (id: string, element: React.ReactElement): void |
-| property.appendAfter     | Append element after target platform element.          | (id: string, element: React.ReactElement): void |
-| property.replace         | Replace target platform element with element.          | (id: string, element: React.ReactElement): void |
-| property.replaceChildren | Replace target platform element children with element. | (id: string, element: React.ReactElement): void |
-| property.remove          | Remove target platform element.                        | (id: string): void                              |
-| property.insertBefore    | Insert element before target platform element.         | (id: string, element: React.ReactElement): void |
-| property.insertAfter     | Insert element after target platform element.          | (id: string, element: React.ReactElement): void |
+| Property        | Description                                            | Type                                            |
+| --------------- | ------------------------------------------------------ | ----------------------------------------------- |
+| appendBefore    | Append element before target platform element.         | (id: string, element: React.ReactElement): void |
+| appendAfter     | Append element after target platform element.          | (id: string, element: React.ReactElement): void |
+| replace         | Replace target platform element with element.          | (id: string, element: React.ReactElement): void |
+| replaceChildren | Replace target platform element children with element. | (id: string, element: React.ReactElement): void |
+| replaceProps    | Replace target platform element props with element.    | (id: string, resetProps: object): void          |
+| remove          | Remove target platform element.                        | (id: string): void                              |
+| insertBefore    | Insert element before target platform element.         | (id: string, element: React.ReactElement): void |
+| insertAfter     | Insert element after target platform element.          | (id: string, element: React.ReactElement): void |
 
 ## License
 

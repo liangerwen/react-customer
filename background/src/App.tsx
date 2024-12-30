@@ -1,56 +1,37 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import { CustomProps, withCustom } from "react-customer";
-
-import "./App.css";
+import { withCustom } from "react-customer";
+import { Button } from "antd";
 
 export interface AppExposeApi {
-  increase: () => void;
+  clickButton: () => void;
 }
 
 export interface AppCustomApi {
-  count: number;
-  increase: () => void;
+  setInputText: (text: string) => void;
 }
 
-const App = withCustom(
+const App = withCustom<AppCustomApi, AppExposeApi>(
   "App",
-  ({ customApi, exposeApi, wrap }: CustomProps<AppCustomApi, AppExposeApi>) => {
-    const [count, setCount] = useState(0);
-    exposeApi({
-      increase: () => {
-        setCount(count - 1);
-      },
-    });
+  ({ customApi, exposeApi, wrap }) => {
+    const clickButton = () => {
+      customApi?.setInputText?.("点击了Button1");
+    };
+
+    exposeApi({ clickButton });
 
     return wrap(
       <>
-        <div>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button
-            onClick={() => {
-              setCount(count + 1);
-              customApi?.increase?.();
-            }}
-          >
-            count is {count}
-          </button>
-          <p data-id="origin">
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
+        <Button type="primary" onClick={clickButton} data-id="button-01">
+          我是Button1
+        </Button>
+        <Button
+          data-id="button-02"
+          type="dashed"
+          onClick={() => {
+            customApi?.setInputText?.("点击了Button2");
+          }}
+        >
+          我是Button2
+        </Button>
       </>
     );
   }

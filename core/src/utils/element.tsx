@@ -12,33 +12,43 @@ type PropsWithChildrenAndDataId = PropsWithChildren & { "data-id": string };
 
 type ReactElementWithChildren = ReactElement<PropsWithChildrenAndDataId>;
 
-type Operate = (
+type OperateElement = (
   originElement: ReactElementWithChildren,
   targetNode: ReactNode
 ) => ReactNode;
 
-const appendBefore: Operate = (originElement, targetNode) => (
+type OperateProps = <P extends Partial<Record<string, any>> = {}>(
+  originElement: ReactElementWithChildren,
+  resetProps: P
+) => ReactNode;
+
+const appendBefore: OperateElement = (originElement, targetNode) => (
   <>
     {targetNode}
     {originElement}
   </>
 );
 
-const appendAfter: Operate = (originElement, targetNode) => (
+const appendAfter: OperateElement = (originElement, targetNode) => (
   <>
     {originElement}
     {targetNode}
   </>
 );
 
-const replace: Operate = (_originElement, targetNode) => targetNode;
+const replace: OperateElement = (_originElement, targetNode) => targetNode;
 
-const replaceChildren: Operate = (originElement, targetNode) =>
+const replaceChildren: OperateElement = (originElement, targetNode) =>
   cloneElement(originElement, undefined, targetNode);
 
-const remove: Operate = () => null;
+const replaceProps: OperateProps = (originElement, resetProps) => {
+  const { "data-id": dataId, ...rest } = resetProps ?? {};
+  return cloneElement(originElement, rest);
+};
 
-const insertBefore: Operate = (originElement, targetNode) =>
+const remove: OperateElement = () => null;
+
+const insertBefore: OperateElement = (originElement, targetNode) =>
   cloneElement(
     originElement,
     undefined,
@@ -46,7 +56,7 @@ const insertBefore: Operate = (originElement, targetNode) =>
     originElement.props.children
   );
 
-const insertAfter: Operate = (originElement, targetNode) =>
+const insertAfter: OperateElement = (originElement, targetNode) =>
   cloneElement(
     originElement,
     undefined,
@@ -62,19 +72,35 @@ const operateMap = {
   remove,
   insertBefore,
   insertAfter,
+  replaceProps,
 };
 
 type MergeElement = (opt: {
   originNode: ReactNode;
   targetId: string;
-  targetNode: ReactNode;
+  targetValue: any;
   operateType: keyof typeof operateMap;
 }) => ReactNode;
+
+type MergeUtils = Omit<
+  {
+    [P in keyof typeof operateMap]: (
+      targetId: string,
+      targetValue: Parameters<(typeof operateMap)[P]>[1]
+    ) => void;
+  },
+  "replaceProps"
+> & {
+  replaceProps: <P extends Partial<Record<string, any>> = {}>(
+    targetId: string,
+    targetValue: P
+  ) => void;
+};
 
 const mergeElement: MergeElement = ({
   originNode,
   targetId,
-  targetNode,
+  targetValue,
   operateType,
 }) => {
   let hasFindTarget = false;
@@ -87,7 +113,7 @@ const mergeElement: MergeElement = ({
           console.error("operateType is not valid");
           return node;
         }
-        return operate(node, targetNode);
+        return operate(node, targetValue);
       }
       if (hasFindTarget) return node;
       return cloneElement(
@@ -96,7 +122,7 @@ const mergeElement: MergeElement = ({
         mergeElement({
           originNode: node.props.children,
           targetId,
-          targetNode,
+          targetValue,
           operateType,
         })
       );
@@ -107,17 +133,17 @@ const mergeElement: MergeElement = ({
 
 const createElementWithUtils = ($element: MutableRefObject<ReactNode>) => {
   const utils = Object.keys(operateMap).reduce((acc, key) => {
-    const operateType = key as keyof typeof operateMap;
-    acc[operateType] = (targetId, targetNode) => {
+    const operateType = key as keyof MergeUtils;
+    acc[operateType] = (targetId: string, targetValue: any) => {
       $element.current = mergeElement({
         originNode: $element.current,
         targetId,
-        targetNode,
+        targetValue,
         operateType,
       });
     };
     return acc;
-  }, {} as Record<keyof typeof operateMap, (id: string, node: ReactNode) => void>);
+  }, {} as MergeUtils);
   return utils;
 };
 

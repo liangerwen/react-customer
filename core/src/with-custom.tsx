@@ -1,9 +1,9 @@
 import {
-  ComponentProps,
   ComponentType,
   forwardRef,
-  PropsWithRef,
-  ReactNode,
+  PropsWithoutRef,
+  ReactElement,
+  RefAttributes,
   useContext,
 } from "react";
 import { useCustomApi, useCustomWrap } from "./hooks";
@@ -17,25 +17,17 @@ export interface CustomProps<
 > {
   customApi: Partial<C>;
   exposeApi: (api: T) => void;
-  wrap: (component: ReactNode) => ReactNode;
+  wrap: (component: ReactElement) => ReactElement;
 }
-
-type ComponentWithCustomProps<
-  C extends DefaultApi,
-  T extends DefaultApi,
-  P extends CustomProps<C, T>
-> = ComponentType<PropsWithRef<P & CustomProps<C, T>>>;
 
 const withCustom = (() => {
   const componentMap: Record<string, ComponentType<any>> = {};
-  return <
-    C extends DefaultApi,
-    T extends DefaultApi,
-    P extends CustomProps<C, T>
-  >(
+  return <C extends DefaultApi, T extends DefaultApi, K = {}, U = unknown>(
     id: string,
-    WrappedComponent: ComponentWithCustomProps<C, T, P>
-  ): ComponentType<Omit<PropsWithRef<P>, keyof P>> => {
+    WrappedComponent: ComponentType<
+      PropsWithoutRef<CustomProps<C, T>> & RefAttributes<U> & PropsWithoutRef<K>
+    >
+  ) => {
     if (!componentMap[id]) {
       componentMap[id] = WrappedComponent;
     }
@@ -44,9 +36,7 @@ const withCustom = (() => {
         `The component with id {{${id}}} has already been registered with a different component. The new component will override the old one.`
       );
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return forwardRef((props, ref) => {
+    return forwardRef<U, K>((props, ref) => {
       const customApi = useCustomApi<C>(id);
       const ctx = useContext(CustomContext);
 
@@ -60,9 +50,8 @@ const withCustom = (() => {
       const wrap = useCustomWrap(id);
 
       return (
-        // @ts-ignore
         <WrappedComponent
-          {...(props as ComponentProps<typeof WrappedComponent>)}
+          {...props}
           customApi={customApi}
           exposeApi={exposeApi}
           wrap={wrap}

@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build"
   },
   "dependencies": {
+    "antd": "^5.22.7",
     "react": "^18.3.1",
     "react-customer": "workspace:*",
     "react-dom": "^18.3.1"

@@ -40,107 +40,85 @@ createRoot(document.getElementById("root")!).render(
 );
 
 // plugins.tsx
-import { forwardRef, useState, useImperativeHandle, useEffect } from "react";
-import { CustomPluginProps } from "react-customer";
+import { forwardRef, useState, useImperativeHandle } from "react";
+import { withDefineCustom } from "react-customer";
+import { Button, ButtonProps, Input } from "antd";
 
-const AppPlugin = forwardRef(
-  (
-    { merge, platformApi }: CustomPluginProps<{ increase: () => void }>,
-    ref
-  ) => {
-    const [c, setC] = useState(1000);
+const AppPlugin = withDefineCustom<{
+  clickButton: () => void;
+}>(
+  "App",
+  forwardRef(({ merge, platformApi }, ref) => {
+    const [text, setText] = useState("");
+
+    const setInputText = (txt: string) => setText(txt);
 
     useImperativeHandle(ref, () => {
-      return {
-        increase: () => {
-          setC(c + 1);
-        },
-        c,
-      };
+      return { setInputText };
     });
-
-    useEffect(() => {
-      return () => console.log("unmount");
-    }, []);
 
     return merge((element) => {
-      element.insertAfter(
-        "origin",
-        <button
+      element.replaceChildren("button-02", "我是Button2【定制按钮-A】");
+      element.replaceProps<ButtonProps>("button-02", {
+        onClick: () => {
+          setText("点击了定制按钮Button2【A】");
+        },
+      });
+      element.appendBefore(
+        "button-01",
+        <Button
           onClick={() => {
-            setC(c - 1);
-            platformApi.current?.increase?.();
+            platformApi?.clickButton?.();
           }}
         >
-          {c}
-        </button>
+          我是定制按钮Button3【A】
+        </Button>
+      );
+      element.appendAfter(
+        "button-02",
+        <Input value={text} onChange={(e) => setText(e.target.value)} />
       );
     });
-  }
+  })
 );
 
-export default [
-  {
-    name: "App",
-    component: AppPlugin,
-  },
-];
+export default [AppPlugin];
 
 // app.tsx
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import { CustomProps, withCustom } from "react-customer";
-
-import "./App.css";
+import { withCustom } from "react-customer";
+import { Button } from "antd";
 
 export interface AppExposeApi {
-  increase: () => void;
+  clickButton: () => void;
 }
 
 export interface AppCustomApi {
-  count: number;
-  increase: () => void;
+  setInputText: (text: string) => void;
 }
 
-const App = withCustom(
+const App = withCustom<AppCustomApi, AppExposeApi>(
   "App",
-  ({ customApi, exposeApi, wrap }: CustomProps<AppCustomApi, AppExposeApi>) => {
-    const [count, setCount] = useState(0);
-    exposeApi({
-      increase: () => {
-        setCount(count - 1);
-      },
-    });
+  ({ customApi, exposeApi, wrap }) => {
+    const clickButton = () => {
+      customApi?.setInputText?.("点击了Button1");
+    };
+
+    exposeApi({ clickButton });
 
     return wrap(
       <>
-        <div>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button
-            onClick={() => {
-              setCount(count + 1);
-              customApi.current?.increase?.();
-              console.log(customApi.current?.count);
-            }}
-          >
-            count is {count}
-          </button>
-          <p data-id="origin">
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
+        <Button type="primary" onClick={clickButton} data-id="button-01">
+          我是Button1
+        </Button>
+        <Button
+          data-id="button-02"
+          type="dashed"
+          onClick={() => {
+            customApi?.setInputText?.("点击了Button2");
+          }}
+        >
+          我是Button2
+        </Button>
       </>
     );
   }
@@ -172,6 +150,7 @@ export default App;
 | appendAfter     | 插入元素到目标平台元素之后。   | (id: string, element: React.ReactElement): void |
 | replace         | 替换目标平台元素。             | (id: string, element: React.ReactElement): void |
 | replaceChildren | 替换目标平台元素的子元素。     | (id: string, element: React.ReactElement): void |
+| replaceProps    | 替换目标元素的 props。         | (id: string, resetProps: object): void          |
 | remove          | 移除目标平台元素。             | (id: string): void                              |
 | insertBefore    | 向目标平台元素之前插入子元素。 | (id: string, element: React.ReactElement): void |
 | insertAfter     | 向目标平台元素之后插入子元素。 | (id: string, element: React.ReactElement): void |

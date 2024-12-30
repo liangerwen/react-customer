@@ -1,11 +1,11 @@
-import { useContext, ReactNode, useCallback } from "react";
+import { useContext, useCallback, ReactElement } from "react";
 import CustomContext from "../context";
 
 const useCustomWrap = (id: string) => {
   const ctx = useContext(CustomContext);
 
   return useCallback(
-    (element: ReactNode) => {
+    (element: ReactElement) => {
       if (!id) {
         return element;
       }
@@ -23,7 +23,7 @@ const useCustomWrap = (id: string) => {
         />
       );
     },
-    [id, ctx.update]
+    [id, ctx.flush]
   );
 };
 

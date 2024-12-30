@@ -3,17 +3,17 @@ import {
   createContext,
   MutableRefObject,
   PropsWithRef,
-  ReactNode,
+  ReactElement,
 } from "react";
 import type { DefaultApi } from "./type";
 
 const CustomContext = createContext<
   MutableRefObject<{
-    elements: Record<string, ReactNode>;
+    elements: Record<string, ReactElement>;
     customApis: Record<string, MutableRefObject<DefaultApi>>;
     platformApis: Record<string, MutableRefObject<DefaultApi>>;
     customComponents: Record<string, ComponentType<PropsWithRef<DefaultApi>>>;
-  }> & { update: object }
+  }> & { flush: object; update: () => void }
 >({
   current: {
     elements: {},
@@ -21,7 +21,8 @@ const CustomContext = createContext<
     platformApis: {},
     customComponents: {},
   },
-  update: {},
+  flush: {},
+  update: () => {},
 });
 
 export default CustomContext;
