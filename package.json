@@ -1,10 +1,16 @@
 {
   "name": "react-customer-menorepo",
   "private": true,
+  "workspaces": [
+    "core",
+    "background",
+    "plugin-demo"
+  ],
   "scripts": {
     "dev": "lerna run --include-dependencies --stream --parallel dev",
     "build": "lerna run build --scope react-customer --stream --ignore '*ignore*'",
-    "pub": "pnpm build && lerna publish"
+    "pub": "pnpm build && lerna publish",
+    "postinstall": "pnpm build"
   },
   "devDependencies": {
     "lerna": "^8.1.8",
