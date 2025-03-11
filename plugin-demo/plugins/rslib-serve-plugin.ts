@@ -1,10 +1,11 @@
 import { createServer } from "node:http";
 import { join, extname } from "node:path";
 import { readFile } from "node:fs";
+import { RsbuildPluginAPI } from "@rsbuild/core";
 
 let server: ReturnType<typeof createServer>;
 
-function getContentType(filePath) {
+function getContentType(filePath: string) {
   const extMap = {
     ".js": "text/javascript",
     ".css": "text/css",
@@ -14,13 +15,16 @@ function getContentType(filePath) {
     ".jpg": "image/jpeg",
     ".gif": "image/gif",
   };
-  return extMap[extname(filePath)] ?? "application/octet-stream";
+  return (
+    extMap[extname(filePath) as keyof typeof extMap] ??
+    "application/octet-stream"
+  );
 }
 
 const servePlugin = ({ target = "dist", port = 8080 } = {}) => {
   return {
     name: "serve-plugin",
-    setup: (api) => {
+    setup: (api: RsbuildPluginAPI) => {
       api.onAfterBuild(() => {
         if (server) {
           server.close();

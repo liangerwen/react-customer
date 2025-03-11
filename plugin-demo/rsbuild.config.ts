@@ -8,7 +8,7 @@ const plugins = readdirSync("src");
 const entries = plugins.reduce((acc, p) => {
   acc[p] = `./src/${p}/index.ts`;
   return acc;
-}, {});
+}, {} as Record<string, string>);
 
 export default defineConfig({
   source: {
