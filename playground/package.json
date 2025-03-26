@@ -1,5 +1,5 @@
 {
-  "name": "background",
+  "name": "playground",
   "type": "module",
   "private": true,
   "scripts": {

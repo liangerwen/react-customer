@@ -21,7 +21,7 @@ importers:
         specifier: ^2.4.4
         version: 2.4.4
 
-  background:
+  playground:
     dependencies:
       antd:
         specifier: ^5.22.7
